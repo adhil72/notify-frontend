@@ -8,44 +8,44 @@ import MyContext from './App/Configs/Context';
 
 const Darktheme = createTheme({
   palette: {
-      mode: 'dark',
-      primary: {
-          main: '#3477eb',
-      },
-      secondary: {
-          main: '#243dff',
-      }
+    mode: 'dark',
+    primary: {
+      main: '#3477eb',
+    },
+    secondary: {
+      main: '#243dff',
+    }
   },
   components: {
-      MuiInputLabel: {
-          defaultProps: {
-              color: 'info'
-          }
+    MuiInputLabel: {
+      defaultProps: {
+        color: 'info'
       }
+    }
   }
 });
 
 const Lighttheme = createTheme({
   palette: {
-      mode: 'light',
-      primary: {
-          main: '#3477eb',
-      },
-      secondary: {
-          main: '#243dff',
-      }
+    mode: 'light',
+    primary: {
+      main: '#3477eb',
+    },
+    secondary: {
+      main: '#243dff',
+    }
   },
   components: {
-      MuiInputLabel: {
-          defaultProps: {
-              color: 'info'
-          }
+    MuiInputLabel: {
+      defaultProps: {
+        color: 'info'
       }
+    }
   }
 });
 
 function App() {
-  const [isNight, setIsNight] = useState(true);
+  const [isNight, setIsNight] = useState(localStorage.getItem('dark') == "true");
 
   const router = useLocation();
   const nav = useNavigate();
@@ -62,6 +62,8 @@ function App() {
     document.getElementsByTagName('body')[0].style.backgroundColor = isNight
       ? '#2a2a2a' // Replace with your dark mode background color
       : '#f2f2f2'; // Replace with your light mode background color
+
+    localStorage.setItem('dark', `${isNight}`)
   }, [isNight]);
 
   return (
