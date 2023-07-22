@@ -1,7 +1,7 @@
-import { Box, Button, CircularProgress, Divider, Grow, IconButton, LinearProgress, Paper, TextField, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Grow, IconButton, Paper, TextField, Typography } from '@mui/material'
 import React, { useContext, useEffect, useState } from 'react'
 import AppContext from "../Configs/Context"
-import { Brightness1Rounded, Brightness2Rounded, Brightness5Rounded, Brightness7Rounded, DarkModeRounded, LightModeRounded } from '@mui/icons-material'
+import { Brightness5Rounded, Brightness7Rounded } from '@mui/icons-material'
 import { confirmVerification, createAuthRequest, createVerification, generateToken, updatePassword } from '../../Api/Auth'
 
 function Auth() {
@@ -22,7 +22,7 @@ function Auth() {
         console.log(userData);
 
         let value = inputText
-        if (inputProps.label == 'Email') {
+        if (inputProps.label === 'Email') {
             createAuthRequest(value).then((res) => {
                 setUserData(res.data)
                 handleUiChange(res.data)
@@ -30,7 +30,7 @@ function Auth() {
                 console.log(err);
                 handleUiChange()
             })
-        } else if (inputProps.label == 'Add password') {
+        } else if (inputProps.label === 'Add password') {
             let password = inputText
             updatePassword({ password, id: userData.id }).then((res) => {
                 userData.password = "true"
@@ -38,7 +38,7 @@ function Auth() {
                 localStorage.setItem('token', JSON.stringify(res.data.access))
                 handleUiChange(userData)
             })
-        } else if (inputProps.label == 'Password') {
+        } else if (inputProps.label === 'Password') {
             let password = inputText
             generateToken({ password, id: userData.id }).then((res) => {
                 setUserData(userData)
@@ -46,7 +46,7 @@ function Auth() {
                 localStorage.setItem('token', JSON.stringify(res.data.access))
                 handleUiChange(userData)
             })
-        } else if (inputProps.label == 'Code') {
+        } else if (inputProps.label === 'Code') {
             let code = inputText
             confirmVerification({ id: userData.id, code }).then((res) => {
                 userData.verified = true
@@ -58,19 +58,19 @@ function Auth() {
 
     const handleUiChange = (userData?: any) => {
         if (userData) {
-            if (userData.id == "") {
+            if (userData.id === "") {
                 setInputText('')
                 setinputProps({ label: 'Email', type: 'email', hint: 'Enter your email to login in' })
                 setProcessing(false)
-            } else if (userData.password == "false") {
+            } else if (userData.password === "false") {
                 setInputText('')
                 setinputProps({ label: 'Add password', type: 'password', hint: 'Add a password to your account' })
                 setProcessing(false)
-            } else if (userData.password == "true" && localStorage.getItem('token') == null) {
+            } else if (userData.password === "true" && localStorage.getItem('token') === null) {
                 setInputText('')
                 setinputProps({ label: 'Password', type: 'password', hint: 'Enter your password' })
                 setProcessing(false)
-            } else if (userData.verified == false) {
+            } else if (userData.verified === false) {
                 createVerification(userData.id).then((res) => {
                     setInputText('')
                     setinputProps({ label: 'Code', type: 'tel', hint: 'We have send an mail with code to ' + userData.email + '' })
@@ -107,7 +107,7 @@ function Auth() {
                                 {processing && <CircularProgress size={'170px'} sx={{ position: 'fixed', ml: '-165px', mt: '-5px' }} />}
                             </Box>
                             <Typography variant='h6'>Login to Notify</Typography>
-                            <Typography sx={{ color: 'gray', fontSize: '15px',width:'250px',overflow:'visible' }}>{inputProps.hint}</Typography>
+                            <Typography sx={{ color: 'gray', fontSize: '15px', width: '250px', overflow: 'visible' }}>{inputProps.hint}</Typography>
                             <TextField disabled={processing} label={inputProps.label} InputProps={{ sx: { borderRadius: '20px' } }} type={inputProps.type} fullWidth value={inputText} onChange={(t) => setInputText(t.target.value)} />
                             <br />
                             <Button onClick={handleNextClick} disabled={processing} sx={{ p: 1, borderRadius: '10px', mt: 1 }} fullWidth variant='contained'>Next</Button>

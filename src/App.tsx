@@ -51,6 +51,11 @@ function App() {
   const nav = useNavigate();
 
   useEffect(() => {
+    localStorage.getItem('token') === "undefined" && localStorage.removeItem('token')
+  }, [])
+
+
+  useEffect(() => {
     if (router.pathname !== '/auth') {
       if (localStorage.getItem('token') === null) {
         nav('/auth');
