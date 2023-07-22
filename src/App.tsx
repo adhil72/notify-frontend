@@ -1,24 +1,78 @@
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom"
-import Auth from "./App/Auth/Auth";
-import { useEffect } from "react";
-function App() {
+// App.js
+import React, { useEffect, useState } from 'react';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { ThemeProvider } from '@emotion/react';
+import { createTheme } from '@mui/material';
+import Auth from './App/Auth/Auth';
+import MyContext from './App/Configs/Context';
 
-  const router = useLocation()
-  const nav = useNavigate()
+const Darktheme = createTheme({
+  palette: {
+      mode: 'dark',
+      primary: {
+          main: '#3477eb',
+      },
+      secondary: {
+          main: '#243dff',
+      }
+  },
+  components: {
+      MuiInputLabel: {
+          defaultProps: {
+              color: 'info'
+          }
+      }
+  }
+});
+
+const Lighttheme = createTheme({
+  palette: {
+      mode: 'light',
+      primary: {
+          main: '#3477eb',
+      },
+      secondary: {
+          main: '#243dff',
+      }
+  },
+  components: {
+      MuiInputLabel: {
+          defaultProps: {
+              color: 'info'
+          }
+      }
+  }
+});
+
+function App() {
+  const [isNight, setIsNight] = useState(true);
+
+  const router = useLocation();
+  const nav = useNavigate();
 
   useEffect(() => {
-    if (router.pathname != '/auth') {
-      if (localStorage.getItem('token')==null) {
-        nav('/auth')
+    if (router.pathname !== '/auth') {
+      if (localStorage.getItem('token') === null) {
+        nav('/auth');
       }
     }
-  }, [router.pathname])
+  }, [router.pathname]);
 
-  return <>
-    <Routes>
-      <Route path="/auth" Component={Auth} />
-    </Routes>
-  </>
+  useEffect(() => {
+    document.getElementsByTagName('body')[0].style.backgroundColor = isNight
+      ? '#2a2a2a' // Replace with your dark mode background color
+      : '#f2f2f2'; // Replace with your light mode background color
+  }, [isNight]);
+
+  return (
+    <MyContext.Provider value={{ isNight, setIsNight }}>
+      <ThemeProvider theme={isNight ? Darktheme : Lighttheme}>
+        <Routes>
+          <Route path="/auth" element={<Auth />} />
+        </Routes>
+      </ThemeProvider>
+    </MyContext.Provider>
+  );
 }
 
 export default App;
