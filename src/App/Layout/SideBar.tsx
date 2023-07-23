@@ -31,32 +31,13 @@ function SideBar() {
                             SideBarElement.map((e) => {
                                 let active = ctx.active === e.title.toLocaleLowerCase()
                                 return <Grow in>
-                                    <Box className={`${active ? 'selectedItem' : 'listItem'}`} sx={{ display: 'flex', justifyContent: 'left', p: 1.5, mt: 0.5 }}>{<e.icon sx={{}} />} <Typography sx={{ ml: 2 }}>{e.title}</Typography></Box>
+                                    <Box className={`${ctx.isNight ? active ? 'selectedItem_dark' : 'listItem_dark' : active ? 'selectedItem' : 'listItem'}`} sx={{ display: 'flex', justifyContent: 'left', p: 1.5, mt: 0.5 }}>{<e.icon sx={{}} />} <Typography sx={{ ml: 2 }}>{e.title}</Typography></Box>
                                 </Grow>
                             })
                         }
                     </Box>
                 </Box>
-                <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                    <Box sx={{ width: '90%' }}>
-                        <Typography sx={{ fontWeight: 'bold' }}>Last Messages</Typography>
-                        <br />
-                        {[1, 2, 3, 4, 5].map((i) => {
-                            return <>
-                                <Box sx={{ display: 'flex', mt: 1 }}>
-                                    <Box sx={{ width: '40px', height: '40px', borderRadius: '100%', backgroundColor: 'lightgray', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                                        <WhatsApp sx={{ width: '20px', height: '20px' }} />
-                                    </Box>
-                                    <Box sx={{ ml: 2 }}>
-                                        <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>User</Typography>
-                                        <Typography sx={{ fontSize: '12px' }}>{"This is a sample message i wanted to share with you becaoudse it is a test message".slice(0, 34)}...</Typography>
-                                    </Box>
-                                </Box>
-                                {/* <Divider sx={{ mt: 0.8 }} variant='middle' /> */}
-                            </>
-                        })}
-                    </Box>
-                </Box>
+                
             </Box>
         </Box>
     )

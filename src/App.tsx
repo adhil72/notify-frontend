@@ -7,6 +7,7 @@ import Auth from './App/Auth/Auth';
 import MyContext from './App/Configs/Context';
 import SideBar from './App/Layout/SideBar';
 import Layout from './App/Layout/Layout';
+import Home from './App/Home/Home';
 
 const Darktheme = createTheme({
   palette: {
@@ -84,6 +85,7 @@ function App() {
         <Layout child={
           <Routes>
             <Route path="/auth" element={<Auth />} />
+            <Route path='/' element={<Home />} />
           </Routes>
         } />
 
