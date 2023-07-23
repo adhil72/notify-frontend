@@ -1,5 +1,5 @@
-import { BarChartRounded, ChatRounded, HomeRounded, NotificationAddRounded, Person2Rounded, PersonRounded, Smartphone, SmartphoneOutlined, WhatsApp, WhatshotRounded } from '@mui/icons-material'
-import { Box, Button, Divider, Icon, IconButton, Paper, Typography } from '@mui/material'
+import { BarChartRounded, HomeRounded, PersonRounded, SmartphoneOutlined, WhatsApp } from '@mui/icons-material'
+import { Box, Typography } from '@mui/material'
 import AppCtx from "../Configs/Context"
 import { useContext } from 'react'
 import theme from '../Configs/theme'
@@ -29,7 +29,7 @@ function SideBar() {
                         <Typography sx={{ fontWeight: 'bold' }}>Menu</Typography>
                         {
                             SideBarElement.map((e) => {
-                                let active = ctx.active == e.title.toLocaleLowerCase()
+                                let active = ctx.active === e.title.toLocaleLowerCase()
                                 return <Box className={`${active ? 'selectedItem' : 'listItem'}`} sx={{ display: 'flex', justifyContent: 'left', p: 1.5, mt: 0.5 }}>{<e.icon sx={{}} />} <Typography sx={{ ml: 2 }}>{e.title}</Typography></Box>
                             })
                         }
@@ -41,7 +41,7 @@ function SideBar() {
                         <br />
                         {[1, 2, 3, 4, 5].map((i) => {
                             return <>
-                                <Box sx={{ display: 'flex',mt:1 }}>
+                                <Box sx={{ display: 'flex', mt: 1 }}>
                                     <Box sx={{ width: '40px', height: '40px', borderRadius: '100%', backgroundColor: 'lightgray', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                         <WhatsApp sx={{ width: '20px', height: '20px' }} />
                                     </Box>

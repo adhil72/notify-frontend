@@ -9,7 +9,7 @@ function Layout({ child }: { child: any }) {
     const [pageProps, setpageProps] = useState({ w1: '10%', w2: '90%' })
 
     useEffect(() => {
-        if (router.pathname == '/auth') {
+        if (router.pathname === '/auth') {
             setpageProps({ w1: '0%', w2: '100%' })
         } else {
             setpageProps({ w1: '20%', w2: '80%' })
