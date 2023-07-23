@@ -7,6 +7,29 @@ body {
     color: #181818;
 }
 
-*{
+* {
     transition: 0.3s;
+}
+
+.listItem {
+    transition: 0s !important;
+    cursor: pointer;
+    border-radius: 15px;
+    color: grey;
+}
+
+.listItem:hover {
+    transition: 0s !important;
+    background-color: rgba(211, 211, 211, 0.466);
+    color: #3477eb;
+    font-weight: bold;
+}
+
+.selectedItem {
+    transition: 0s !important;
+    cursor: pointer;
+    border-radius: 15px;
+    background-color: rgba(211, 211, 211, 0.466);
+    color: #3477eb;
+    font-weight: bold;
 }

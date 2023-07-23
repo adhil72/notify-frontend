@@ -99,7 +99,7 @@ function Auth() {
 
             <Box sx={{ width: '100%', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <Grow in>
-                    <Paper sx={{ width: '300px', height: 'fit-content', p: 4, borderRadius: '30px', backgroundColor: ' colors.theme ' }}>
+                    <Paper sx={{ width: '300px', height: 'fit-content', p: 4, borderRadius: '30px' }}>
                         <center>
                             <br />
                             <Box>

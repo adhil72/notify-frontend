@@ -5,6 +5,8 @@ import { ThemeProvider } from '@emotion/react';
 import { createTheme } from '@mui/material';
 import Auth from './App/Auth/Auth';
 import MyContext from './App/Configs/Context';
+import SideBar from './App/Layout/SideBar';
+import Layout from './App/Layout/Layout';
 
 const Darktheme = createTheme({
   palette: {
@@ -46,6 +48,7 @@ const Lighttheme = createTheme({
 
 function App() {
   const [isNight, setIsNight] = useState(localStorage.getItem('dark') == "true");
+  const [active, setActive] = useState('home')
 
   const router = useLocation();
   const nav = useNavigate();
@@ -60,6 +63,10 @@ function App() {
       if (localStorage.getItem('token') === null) {
         nav('/auth');
       }
+    } else if (router.pathname === '/auth') {
+      if (localStorage.getItem('token') !== null) {
+        nav('/');
+      }
     }
   }, [router.pathname]);
 
@@ -72,11 +79,14 @@ function App() {
   }, [isNight]);
 
   return (
-    <MyContext.Provider value={{ isNight, setIsNight }}>
+    <MyContext.Provider value={{ active, isNight, setIsNight }}>
       <ThemeProvider theme={isNight ? Darktheme : Lighttheme}>
-        <Routes>
-          <Route path="/auth" element={<Auth />} />
-        </Routes>
+        <Layout child={
+          <Routes>
+            <Route path="/auth" element={<Auth />} />
+          </Routes>
+        } />
+
       </ThemeProvider>
     </MyContext.Provider>
   );
