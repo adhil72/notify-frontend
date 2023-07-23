@@ -12,7 +12,7 @@ function Layout({ child }: { child: any }) {
         if (router.pathname === '/auth') {
             setpageProps({ w1: '0%', w2: '100%' })
         } else {
-            setpageProps({ w1: '20%', w2: '80%' })
+            setpageProps({ w1: '18%', w2: '83%' })
         }
     }, [router.pathname])
 

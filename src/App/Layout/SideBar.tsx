@@ -1,5 +1,5 @@
 import { BarChartRounded, HomeRounded, PersonRounded, SmartphoneOutlined, WhatsApp } from '@mui/icons-material'
-import { Box, Typography } from '@mui/material'
+import { Box, Grow, Typography } from '@mui/material'
 import AppCtx from "../Configs/Context"
 import { useContext } from 'react'
 import theme from '../Configs/theme'
@@ -30,7 +30,9 @@ function SideBar() {
                         {
                             SideBarElement.map((e) => {
                                 let active = ctx.active === e.title.toLocaleLowerCase()
-                                return <Box className={`${active ? 'selectedItem' : 'listItem'}`} sx={{ display: 'flex', justifyContent: 'left', p: 1.5, mt: 0.5 }}>{<e.icon sx={{}} />} <Typography sx={{ ml: 2 }}>{e.title}</Typography></Box>
+                                return <Grow in>
+                                    <Box className={`${active ? 'selectedItem' : 'listItem'}`} sx={{ display: 'flex', justifyContent: 'left', p: 1.5, mt: 0.5 }}>{<e.icon sx={{}} />} <Typography sx={{ ml: 2 }}>{e.title}</Typography></Box>
+                                </Grow>
                             })
                         }
                     </Box>
