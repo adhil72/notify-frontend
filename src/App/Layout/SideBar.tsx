@@ -3,14 +3,18 @@ import { Box, Grow, Typography } from '@mui/material'
 import AppCtx from "../Configs/Context"
 import { useContext } from 'react'
 import theme from '../Configs/theme'
+import { useNavigate } from 'react-router-dom'
 
 function SideBar() {
-    const SideBarElement: { title: string, icon: any, onClick?: (index: number) => void }[] = [
-        { title: 'Home', icon: HomeRounded },
-        { title: 'Devices', icon: SmartphoneOutlined },
-        { title: 'Stats', icon: BarChartRounded }
-    ]
+
+    const nav = useNavigate()
     const ctx: any = useContext(AppCtx)
+
+    const SideBarElement: { title: string, icon: any, onClick?: () => void }[] = [
+        { title: 'Home', icon: HomeRounded, onClick: () => nav('/') },
+        { title: 'Devices', icon: SmartphoneOutlined, onClick: () => nav('/devices') }
+    ]
+    
     return (
         <Box sx={{ width: '100%', height: '100vh' }}>
             <Box>
@@ -31,13 +35,13 @@ function SideBar() {
                             SideBarElement.map((e) => {
                                 let active = ctx.active === e.title.toLocaleLowerCase()
                                 return <Grow in>
-                                    <Box className={`${ctx.isNight ? active ? 'selectedItem_dark' : 'listItem_dark' : active ? 'selectedItem' : 'listItem'}`} sx={{ display: 'flex', justifyContent: 'left', p: 1.5, mt: 0.5 }}>{<e.icon sx={{}} />} <Typography sx={{ ml: 2 }}>{e.title}</Typography></Box>
+                                    <Box onClick={e.onClick} className={`${ctx.isNight ? active ? 'selectedItem_dark' : 'listItem_dark' : active ? 'selectedItem' : 'listItem'}`} sx={{ display: 'flex', justifyContent: 'left', p: 1.5, mt: 0.5 }}>{<e.icon sx={{}} />} <Typography sx={{ ml: 2 }}>{e.title}</Typography></Box>
                                 </Grow>
                             })
                         }
                     </Box>
                 </Box>
-                
+
             </Box>
         </Box>
     )

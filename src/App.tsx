@@ -8,6 +8,8 @@ import MyContext from './App/Configs/Context';
 import SideBar from './App/Layout/SideBar';
 import Layout from './App/Layout/Layout';
 import Home from './App/Home/Home';
+import Devices from './App/Devices/Devices';
+import instance from './Api/Config';
 
 const Darktheme = createTheme({
   palette: {
@@ -69,6 +71,13 @@ function App() {
         nav('/');
       }
     }
+
+    if (router.pathname === '/') {
+      setActive('home')
+    } else if (router.pathname === '/devices') {
+      setActive('devices')
+    }
+
   }, [router.pathname]);
 
   useEffect(() => {
@@ -79,13 +88,22 @@ function App() {
     localStorage.setItem('dark', `${isNight}`)
   }, [isNight]);
 
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      let data = JSON.parse(localStorage.getItem('token') as string)
+      instance.defaults.headers.access = data.token
+    }
+  }, [localStorage.getItem('token')])
+
+
   return (
-    <MyContext.Provider value={{ active, isNight, setIsNight }}>
+    <MyContext.Provider value={{ active, setActive, isNight, setIsNight }}>
       <ThemeProvider theme={isNight ? Darktheme : Lighttheme}>
         <Layout child={
           <Routes>
             <Route path="/auth" element={<Auth />} />
             <Route path='/' element={<Home />} />
+            <Route path='/devices' element={<Devices />} />
           </Routes>
         } />
 

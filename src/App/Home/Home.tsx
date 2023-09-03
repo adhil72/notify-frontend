@@ -1,4 +1,4 @@
-import { Box, Divider, Paper, Tooltip, Typography } from '@mui/material'
+import { Box, Collapse, Divider, Paper, Tooltip, Typography } from '@mui/material'
 import theme from '../Configs/theme'
 import { Brightness5Rounded, Brightness7Rounded, LogoutOutlined, NotificationsActiveOutlined, WhatsApp } from '@mui/icons-material'
 import Ctx from "../Configs/Context"
@@ -21,12 +21,12 @@ function Home() {
                             <NotificationsActiveOutlined sx={{ color: theme(true).primary, fontSize: '20px' }} />
                         </Box>
                     </Tooltip>
-                    <Tooltip title='Theme'>
+                    <Tooltip title='Change theme'>
                         <Box onClick={() => ctx.setIsNight(!ctx.isNight)} sx={{ ml: 1, cursor: 'pointer', width: '40px', height: '40px', borderStyle: 'solid', borderWidth: '1px', borderColor: theme(true).primary, borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             {ctx.isNight ? <Brightness7Rounded sx={{ color: theme(true).primary, fontSize: '20px' }} /> : <Brightness5Rounded sx={{ color: theme(true).primary, fontSize: '20px' }} />}
                         </Box>
                     </Tooltip>
-                    <Tooltip onClick={() => { localStorage.clear(); localStorage.setItem('dark', `${ctx.isNight}`); window.location.href = '/' }} title='Notifications'>
+                    <Tooltip onClick={() => { localStorage.clear(); localStorage.setItem('dark', `${ctx.isNight}`); window.location.href = '/' }} title='Logout'>
                         <Box sx={{ ml: 1, cursor: 'pointer', width: '40px', height: '40px', borderStyle: 'solid', borderWidth: '1px', borderColor: theme(true).primary, borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <LogoutOutlined sx={{ color: theme(true).primary, fontSize: '20px' }} />
                         </Box>
@@ -47,7 +47,7 @@ function Home() {
                     <Typography sx={{ ml: 3 }}>Messages send this month</Typography>
                 </Paper>
             </Box>
-            <Box sx={{ ml: 2, mt: 2, mr: 2,mb:2 }}>
+            <Box sx={{ ml: 2, mt: 2, mr: 2, mb: 2 }}>
                 <Paper sx={{ p: 2 }}>
                     <Box sx={{ display: 'flex', alignContent: 'center', alignItems: 'center' }}><Typography>Recent messages</Typography><Typography sx={{ fontSize: '10px', color: 'GrayText', ml: 1 }}>(Fetched from your devices)</Typography></Box>
                     <br />
@@ -59,11 +59,13 @@ function Home() {
                                 </Box>
                                 <Box sx={{ ml: 2 }}>
                                     <Typography sx={{ fontSize: '18px', fontWeight: 'bold' }}>User</Typography>
-                                    <Typography sx={{ fontSize: '14px', color: 'GrayText', maxWidth: '70%' }}>Hello world. it is a test message from notify.Hello world. it is a test message from notify.Hello world. it is a test message from notify.Hello world. it is a test message from notify.Hello world. it is a test message from notifyHello world. it is a test message from notifyHello world. it is a test message from notifyHello world. it is a test message from notifyHello world. it is a test message from notifyHello world. it is a test message from notify</Typography>
+                                    <Collapse in={ctx.active ? true : true}>
+                                        <Typography sx={{ fontSize: '14px', color: 'GrayText', maxWidth: '70%' }}>Hello world. it is a test message from notify.Hello world. it is a test message from notify.Hello world. it is a test message from notify.Hello world. it is a test message from notify.Hello world. it is a test message from notifyHello world. it is a test message from notifyHello world. it is a test message from notifyHello world. it is a test message from notifyHello world. it is a test message from notifyHello world. it is a test message from notify</Typography>
+                                    </Collapse>
                                 </Box>
                             </Box>
-                            <br />
-                                <Divider variant='middle'/>
+                                <br />
+                                <Divider variant='middle' />
                                 <br />
                             </>
                         })}

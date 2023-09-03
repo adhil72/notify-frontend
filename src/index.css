@@ -8,7 +8,11 @@ body {
 }
 
 * {
-    transition: 0.05s;
+    transition: 0.1s;
+}
+
+.no-amin {
+    transition: 0 !important;
 }
 
 .listItem {
@@ -72,5 +76,11 @@ body {
 
 ::-webkit-scrollbar-thumb {
     background-color: #3477eb;
-    outline:none;
+    outline: none;
+}
+
+.border-hover:hover {
+    transition: 0.3s;
+    margin: 10px;
+    border-color: #3477eb;
 }
