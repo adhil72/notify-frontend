@@ -1,90 +1,94 @@
-import { Box, Button, CircularProgress, Grow, IconButton, Paper, TextField, Typography } from '@mui/material'
-import React, { useContext, useEffect, useState } from 'react'
+import { Box, Button, CircularProgress, Collapse, Grow, IconButton, Paper, TextField, Typography } from '@mui/material'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import AppContext from "../Configs/Context"
 import { Brightness5Rounded, Brightness7Rounded } from '@mui/icons-material'
-import { confirmVerification, createAuthRequest, createVerification, generateToken, updatePassword } from '../../Api/Auth'
+import { loginController, updateNameController, updatePasswordController, updateUserNameController } from '../../Api/Auth'
+import { updateHeader } from '../../Api/Config'
+import { useNavigate } from 'react-router-dom'
 
 function Auth() {
     const appCtx: any = useContext(AppContext)
     const [inputText, setInputText] = useState('')
     const [inputProps, setinputProps] = useState({ label: 'Email', type: 'email', hint: '' })
     const [processing, setProcessing] = useState(true)
-    const [userData, setUserData] = useState({
-        "id": "",
-        "email": "",
-        "name": "",
-        "password": "false",
-        "verified": false
-    })
-
-    const handleNextClick = () => {
-        setProcessing(true)
-        console.log(userData);
-
-        let value = inputText
-        if (inputProps.label === 'Email') {
-            createAuthRequest(value).then((res) => {
-                setUserData(res.data)
-                handleUiChange(res.data)
-            }).catch((err) => {
-                console.log(err);
-                handleUiChange()
-            })
-        } else if (inputProps.label === 'Add password') {
-            let password = inputText
-            updatePassword({ password, id: userData.id }).then((res) => {
-                userData.password = "true"
-                setUserData(userData)
-                localStorage.setItem('token', JSON.stringify(res.data.access))
-                handleUiChange(userData)
-            })
-        } else if (inputProps.label === 'Password') {
-            let password = inputText
-            generateToken({ password, id: userData.id }).then((res) => {
-                setUserData(userData)
-                userData.password = "true"
-                localStorage.setItem('token', JSON.stringify(res.data.access))
-                handleUiChange(userData)
-            })
-        } else if (inputProps.label === 'Code') {
-            let code = inputText
-            confirmVerification({ id: userData.id, code }).then((res) => {
-                userData.verified = true
-                setUserData(userData)
-                handleUiChange(userData)
-            })
-        }
-    }
-
-    const handleUiChange = (userData?: any) => {
-        if (userData) {
-            if (userData.id === "") {
-                setInputText('')
-                setinputProps({ label: 'Email', type: 'email', hint: 'Enter your email to login in' })
-                setProcessing(false)
-            } else if (userData.password === "false") {
-                setInputText('')
-                setinputProps({ label: 'Add password', type: 'password', hint: 'Add a password to your account' })
-                setProcessing(false)
-            } else if (userData.password === "true" && localStorage.getItem('token') === null) {
-                setInputText('')
-                setinputProps({ label: 'Password', type: 'password', hint: 'Enter your password' })
-                setProcessing(false)
-            } else if (userData.verified === false) {
-                createVerification(userData.id).then((res) => {
-                    setInputText('')
-                    setinputProps({ label: 'Code', type: 'tel', hint: 'We have send an mail with code to ' + userData.email + '' })
-                    setProcessing(false)
-                })
-            } else {
-                window.location.href = '/'
-            }
-        }
-    }
+    const submit = useRef<HTMLButtonElement>(null)
+    const nav = useNavigate()
 
     useEffect(() => {
-        handleUiChange(userData)
+        let state = { email: '', password: '', name: '', username: '' }
+        setTimeout(async () => {
+
+            async function analyzeState() {
+                if (state.email === '') {
+                    setinputProps({ hint: 'Enter your email', label: 'Email', type: 'email' })
+                    setProcessing(false)
+                    state.email = await waitForResponse()
+                    setProcessing(true)
+                    await new Promise(async (r) => {
+                        let response = await loginController({ email: state.email })
+                        localStorage.setItem('token', response.data.data.token)
+                        updateHeader('Authorization', `Bearer ${localStorage.getItem('token')}`)
+                        r(null)
+                    })
+                } else if (state.password === '') {
+                    setinputProps({ label: 'Password', hint: 'Create a password', type: 'password' })
+                    setProcessing(false)
+                    state.password = await waitForResponse()
+                    setProcessing(true)
+                    await new Promise(async (r) => {
+                        await updatePasswordController({ password: state.password })
+                        r(null)
+                    })
+                } else if (state.username === '') {
+                    setinputProps({ label: 'Username', hint: 'Create a username', type: 'text' })
+                    setProcessing(false)
+                    state.username = await waitForResponse()
+                    setProcessing(true)
+                    await new Promise(async (r) => {
+                        let res = await updateUserNameController({ username: state.username })
+                        if (res.status != 200) {
+                            state.username = ''
+                        }
+                        r(null)
+                    })
+                } else if (state.name === '') {
+                    setinputProps({ label: 'Name', hint: 'Create a Name', type: 'text' })
+                    setProcessing(false)
+                    state.name = await waitForResponse()
+                    setProcessing(true)
+                    await new Promise(async (r) => {
+                        await updateNameController({ name: state.name })
+                        r(null)
+                    })
+                }
+
+                setTimeout(() => {
+                    if (state.email === '' || state.name === '' || state.password === '' || state.username === '') {
+                        analyzeState()
+                    } else {
+                        nav('/')
+                    }
+                }, 500);
+
+            }
+
+            analyzeState()
+
+        }, 1000);
     }, [])
+
+    const waitForResponse = () => {
+        return new Promise<string>((res, rej) => {
+            if (submit.current) {
+                submit.current.onclick = (e) => {
+                    setInputText((old) => {
+                        res(old)
+                        return ''
+                    })
+                }
+            }
+        })
+    }
 
 
     return (
@@ -106,11 +110,14 @@ function Auth() {
                                 <img style={{ width: '160px', height: 'auto', borderRadius: '100%' }} src={require("../../Assets/Logo.png")} alt="logo" />
                                 {processing && <CircularProgress size={'170px'} sx={{ position: 'fixed', ml: '-165px', mt: '-5px' }} />}
                             </Box>
-                            <Typography variant='h6'>Login to Notify</Typography>
-                            <Typography sx={{ color: 'gray', fontSize: '15px', width: '250px', overflow: 'visible' }}>{inputProps.hint}</Typography>
-                            <TextField disabled={processing} label={inputProps.label} InputProps={{ sx: { borderRadius: '20px' } }} type={inputProps.type} fullWidth value={inputText} onChange={(t) => setInputText(t.target.value)} />
-                            <br />
-                            <Button onClick={handleNextClick} disabled={processing} sx={{ p: 1, borderRadius: '10px', mt: 1 }} fullWidth variant='contained'>Next</Button>
+                            <Typography variant='h6'>{processing ? "Just a sec" : "Login to Notify"}</Typography>
+                            <Typography sx={{ color: 'gray', fontSize: '15px', width: '250px', overflow: 'visible' }}>{!processing && inputProps.hint}</Typography>
+
+                            <Collapse in={!processing}>
+                                <TextField disabled={processing} label={inputProps.label} InputProps={{ sx: { borderRadius: '20px' } }} type={inputProps.type} fullWidth value={inputText} onChange={(t) => setInputText(t.target.value)} />
+                                <br />
+                                <Button ref={submit} disabled={processing} sx={{ p: 1, borderRadius: '10px', mt: 1 }} fullWidth variant='contained'>Next</Button>
+                            </Collapse>
                         </center>
                     </Paper>
                 </Grow>

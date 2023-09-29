@@ -1,25 +1,35 @@
 import instance from "./Config";
 
-const createAuthRequest = (email: string) => {
-    return instance.post("/auth/create", { email })
+const loginController = (body: { email: string }) => {
+    try {
+        return instance.post('/auth/login', body)
+    } catch (error) {
+        throw error
+    }
 }
 
-const updatePassword = (body: { password: string, id: string }) => {
-    return instance.post("/auth/update/password", body)
+const updatePasswordController = (body: { password: string }) => {
+    try {
+        return instance.post('/auth/update/password', body)
+    } catch (error) {
+        throw error
+    }
 }
 
-const createVerification = (id: string) => {
-    return instance.post('/auth/verify', { id })
+const updateNameController = (body: { name: string }) => {
+    try {
+        return instance.post('/auth/update/name', body)
+    } catch (error) {
+        throw error
+    }
 }
 
-const confirmVerification = (props: { id: string, code: string }) => {
-    return instance.post('/auth/verify', props)
+const updateUserNameController = (body: { username: string }) => {
+    try {
+        return instance.post('/auth/update/username', body)
+    } catch (error) {
+        throw error
+    }
 }
 
-const generateToken = (props: { id: string, password: string }) => {
-    console.log(props);
-    
-    return instance.post('/auth/token', props)
-}
-
-export { createAuthRequest, updatePassword, confirmVerification, createVerification, generateToken }
+export { loginController, updatePasswordController, updateNameController, updateUserNameController }

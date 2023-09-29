@@ -88,14 +88,6 @@ function App() {
     localStorage.setItem('dark', `${isNight}`)
   }, [isNight]);
 
-  useEffect(() => {
-    if (localStorage.getItem('token')) {
-      let data = JSON.parse(localStorage.getItem('token') as string)
-      instance.defaults.headers.access = data.token
-    }
-  }, [localStorage.getItem('token')])
-
-
   return (
     <MyContext.Provider value={{ active, setActive, isNight, setIsNight }}>
       <ThemeProvider theme={isNight ? Darktheme : Lighttheme}>

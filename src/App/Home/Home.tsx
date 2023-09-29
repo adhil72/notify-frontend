@@ -1,13 +1,21 @@
-import { Box, Collapse, Divider, Paper, Tooltip, Typography } from '@mui/material'
+import { Box, Collapse, Divider, Paper, Tooltip, Typography, Zoom } from '@mui/material'
 import theme from '../Configs/theme'
 import { Brightness5Rounded, Brightness7Rounded, LogoutOutlined, NotificationsActiveOutlined, WhatsApp } from '@mui/icons-material'
 import Ctx from "../Configs/Context"
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Line } from 'react-chartjs-2'
 import { shortenNumber } from '../Configs/NumberParser'
 function Home() {
 
     const ctx: any = useContext(Ctx)
+    const [active, setActive] = useState(false)
+    useEffect(() => {
+        setActive(false)
+        setTimeout(() => {
+            setActive(true)
+        }, 1);
+    }, [])
+
 
     return (
         <Box sx={{ width: '100%', height: '100vh' }}>
@@ -35,15 +43,19 @@ function Home() {
             </Paper>
             <Box sx={{ m: 2, display: 'flex' }}>
                 <Paper sx={{ mt: 0.5, p: 2, width: '300px', borderRadius: '10px', display: 'flex', alignContent: 'center', alignItems: 'center' }}>
-                    <Typography variant='h5' sx={{ fontWeight: 'bold', width: '50px', height: '50px', display: 'flex', color: 'white', alignItems: 'center', justifyContent: 'center', backgroundColor: theme(true).primary, borderRadius: '100%', fontSize: '18px' }}>{shortenNumber(3, 0)}</Typography>
+                    <Zoom in={active}><Typography variant='h5' sx={{ fontWeight: 'bold', width: '50px', height: '50px', display: 'flex', color: 'white', alignItems: 'center', justifyContent: 'center', backgroundColor: theme(true).primary, borderRadius: '100%', fontSize: '18px' }}>{shortenNumber(3, 0)}</Typography></Zoom>
                     <Typography sx={{ ml: 3 }}>Clients connected</Typography>
                 </Paper>
                 <Paper sx={{ ml: 2, mt: 0.5, p: 2, width: '300px', borderRadius: '10px', display: 'flex', alignContent: 'center', alignItems: 'center' }}>
-                    <Typography variant='h5' sx={{ fontWeight: 'bold', color: 'white', width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: theme(true).primary, borderRadius: '100%', fontSize: '18px' }}>{shortenNumber(324, 0)}</Typography>
+                    <Zoom in={active}>
+                        <Typography variant='h5' sx={{ fontWeight: 'bold', color: 'white', width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: theme(true).primary, borderRadius: '100%', fontSize: '18px' }}>{shortenNumber(324, 0)}</Typography>
+                    </Zoom>
                     <Typography sx={{ ml: 3 }}>Messages send today</Typography>
                 </Paper>
                 <Paper sx={{ ml: 2, mt: 0.5, p: 2, width: '300px', borderRadius: '10px', display: 'flex', alignContent: 'center', alignItems: 'center' }}>
-                    <Typography variant='h5' sx={{ fontWeight: 'bold', color: 'white', width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: theme(true).primary, borderRadius: '100%', fontSize: '18px' }}>{shortenNumber(3240, 0)}</Typography>
+                    <Zoom in={active}>
+                        <Typography variant='h5' sx={{ fontWeight: 'bold', color: 'white', width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: theme(true).primary, borderRadius: '100%', fontSize: '18px' }}>{shortenNumber(3240, 0)}</Typography>
+                    </Zoom>
                     <Typography sx={{ ml: 3 }}>Messages send this month</Typography>
                 </Paper>
             </Box>
@@ -59,7 +71,7 @@ function Home() {
                                 </Box>
                                 <Box sx={{ ml: 2 }}>
                                     <Typography sx={{ fontSize: '18px', fontWeight: 'bold' }}>User</Typography>
-                                    <Collapse in={ctx.active ? true : true}>
+                                    <Collapse in={active}>
                                         <Typography sx={{ fontSize: '14px', color: 'GrayText', maxWidth: '70%' }}>Hello world. it is a test message from notify.Hello world. it is a test message from notify.Hello world. it is a test message from notify.Hello world. it is a test message from notify.Hello world. it is a test message from notifyHello world. it is a test message from notifyHello world. it is a test message from notifyHello world. it is a test message from notifyHello world. it is a test message from notifyHello world. it is a test message from notify</Typography>
                                     </Collapse>
                                 </Box>

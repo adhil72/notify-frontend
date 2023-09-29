@@ -38,7 +38,7 @@ function Devices() {
                 </Paper>
 
                 <Box sx={{ m: 2 }}>
-                    <Paper sx={{ p: 2 }}>
+                    <Paper sx={{ p: 2, borderRadius: '10px' }}>
                         <Grid container gap={1}>
                             <Grid item md={3}>
                                 <Box className='border-hover' sx={{ cursor: 'pointer', width: '100%', height: '70px', borderStyle: 'solid', borderColor: theme(ctx.isNight).grey, borderWidth: '1px', borderRadius: '10px', display: 'flex', alignContent: 'center', alignItems: 'center' }}>
