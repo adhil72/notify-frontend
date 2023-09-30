@@ -10,6 +10,8 @@ import Layout from './App/Layout/Layout';
 import Home from './App/Home/Home';
 import Devices from './App/Devices/Devices';
 import instance from './Api/Config';
+import { getUserDataController } from './Api/Auth';
+import TypeUser from './App/Types/TypeUser';
 
 const Darktheme = createTheme({
   palette: {
@@ -52,6 +54,7 @@ const Lighttheme = createTheme({
 function App() {
   const [isNight, setIsNight] = useState(localStorage.getItem('dark') == "true");
   const [active, setActive] = useState('home')
+  const [userData, setUserData] = useState<TypeUser | null>(null)
 
   const router = useLocation();
   const nav = useNavigate();
@@ -59,6 +62,22 @@ function App() {
   useEffect(() => {
     localStorage.getItem('token') === "undefined" && localStorage.removeItem('token')
   }, [])
+
+  const fetchUserData = () => {
+    getUserDataController().then((response) => {
+      setUserData(response.data.data)
+    }).catch((err) => {
+      throw err
+    })
+  }
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      fetchUserData()
+    }
+  }, [localStorage.getItem('token')])
+
+
 
 
   useEffect(() => {
@@ -89,7 +108,7 @@ function App() {
   }, [isNight]);
 
   return (
-    <MyContext.Provider value={{ active, setActive, isNight, setIsNight }}>
+    <MyContext.Provider value={{ active, setActive, isNight, setIsNight, userData }}>
       <ThemeProvider theme={isNight ? Darktheme : Lighttheme}>
         <Layout child={
           <Routes>

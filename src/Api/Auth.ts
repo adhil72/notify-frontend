@@ -32,4 +32,14 @@ const updateUserNameController = (body: { username: string }) => {
     }
 }
 
-export { loginController, updatePasswordController, updateNameController, updateUserNameController }
+const getUserDataController = () => {
+    try {
+        return instance.get('/auth/get/user')
+    } catch (error) {
+        console.log(error);
+
+        throw error
+    }
+}
+
+export { loginController, updatePasswordController, updateNameController, updateUserNameController, getUserDataController }

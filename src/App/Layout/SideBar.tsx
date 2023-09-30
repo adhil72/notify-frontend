@@ -14,7 +14,7 @@ function SideBar() {
         { title: 'Home', icon: HomeRounded, onClick: () => nav('/') },
         { title: 'Devices', icon: SmartphoneOutlined, onClick: () => nav('/devices') }
     ]
-    
+
     return (
         <Box sx={{ width: '100%', height: '100vh' }}>
             <Box>
@@ -24,8 +24,8 @@ function SideBar() {
                     <Box sx={{ backgroundColor: theme(true).primary, borderRadius: '100%', width: '70px', height: '70px', alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
                         <PersonRounded sx={{ width: '70%', height: '70%', color: 'white' }} />
                     </Box>
-                    <Typography sx={{ fontWeight: 'bold', fontSize: '20px' }}>User</Typography>
-                    <Typography sx={{ color: 'GrayText' }}>user@gmail.com</Typography>
+                    <Typography sx={{ fontWeight: 'bold', fontSize: '20px' }}>{ctx?.userData?.name}</Typography>
+                    <Typography sx={{ color: 'GrayText' }}>{ctx?.userData?.email}</Typography>
                 </center>
                 <br />
                 <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
