@@ -14,21 +14,10 @@ function AddDevicePopup({ open, onClose }: { open: any, onClose?: () => void }) 
         setProcessing(true)
         generateAddToken().then(({ data }) => {
             const qrCode = new QRCode({
-                width: 250,
-                height: 250,
+                width: 400,
+                height: 400,
                 type: "svg",
-                data:JSON.stringify({access:localStorage.getItem("access"),token:data.token}),
-                dotsOptions: {
-                    color: theme(!ctx.isNight).primary,
-                    type: "rounded"
-                },
-                backgroundOptions: {
-                    color: theme(!ctx.isNight).color,
-                },
-                imageOptions: {
-                    crossOrigin: "anonymous",
-                    margin: 20
-                }
+                data: JSON.stringify({ access: localStorage.getItem("token"), token: data.data.token })
             });
 
             qrCode.getRawData('png').then((d) => {
@@ -45,7 +34,7 @@ function AddDevicePopup({ open, onClose }: { open: any, onClose?: () => void }) 
                 <Box sx={{ p: 2 }}>
                     <center>
                         <Typography>Scan this in your phone</Typography>
-                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '250px', height: '250px', border: 'solid 1px ' + theme(ctx.isNight).grey, borderRadius: '10px', overflow: 'hidden' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '400px', height: '400px', border: 'solid 1px ' + theme(ctx.isNight).grey, borderRadius: '10px', overflow: 'hidden' }}>
                             {(!processing && Qr == null) && <Button onClick={generateQr}>Generate Qr</Button>}
                             {(Qr == null && processing) && <CircularProgress />}
                             <Grow in={Qr != null}>

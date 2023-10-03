@@ -1,6 +1,10 @@
 import instance from "./Config";
 
 const generateAddToken = () => {
-    return instance.get('/device/new/generate')
+    return instance.post('/devices/add/request')
 }
-export { generateAddToken }
+
+const getAllDevices = () => {
+    return instance.get('/devices/get')
+}
+export { generateAddToken, getAllDevices }

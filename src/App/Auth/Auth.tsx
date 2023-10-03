@@ -13,9 +13,10 @@ function Auth() {
     const [processing, setProcessing] = useState(true)
     const submit = useRef<HTMLButtonElement>(null)
     const nav = useNavigate()
+    const [error, setError] = useState("")
 
     useEffect(() => {
-        let state = { email: '', password: '', name: '', username: '' }
+        let state = { email: '', password: '', name: '', username: '', newAccount: true }
         setTimeout(async () => {
 
             async function analyzeState() {
@@ -25,20 +26,40 @@ function Auth() {
                     state.email = await waitForResponse()
                     setProcessing(true)
                     await new Promise(async (r) => {
-                        let response = await loginController({ email: state.email })
-                        localStorage.setItem('token', response.data.data.token)
+                        let response = await loginController({ email: state.email }).catch((err) => { return { data: err.response } })
+                        if (response.data.data.message === 'email already exists') {
+                            state.newAccount = false
+                        } else {
+                            localStorage.setItem('token', response.data.data.token)
+                            updateHeader('Authorization', `Bearer ${localStorage.getItem('token')}`)
+                            r(null)
+                        } localStorage.setItem('token', response.data.data.token)
                         updateHeader('Authorization', `Bearer ${localStorage.getItem('token')}`)
                         r(null)
                     })
                 } else if (state.password === '') {
-                    setinputProps({ label: 'Password', hint: 'Create a password', type: 'password' })
+                    if (state.newAccount) setinputProps({ label: 'Password', hint: 'Create a password', type: 'password' })
+                    else setinputProps({ label: 'Password', hint: 'Enter your password', type: 'password' })
                     setProcessing(false)
                     state.password = await waitForResponse()
+                    setError("")
                     setProcessing(true)
-                    await new Promise(async (r) => {
-                        await updatePasswordController({ password: state.password })
-                        r(null)
-                    })
+                    if (state.newAccount) {
+                        await new Promise(async (r) => {
+                            await updatePasswordController({ password: state.password })
+                            r(null)
+                        })
+                    } else {
+                        let response = await loginController({ email: state.email, password: state.password }).catch((err) => err.message)
+                        if (response.status == 200) {
+                            localStorage.setItem('token', response.data.data.token)
+                            updateHeader('Authorization', `Bearer ${localStorage.getItem('token')}`)
+                            state.email = 'verified'; state.password = 'verified'; state.name = 'verified'; state.username = 'verified'
+                        } else {
+                            state.password = ''
+                            setError('Incorrect password')
+                        }
+                    }
                 } else if (state.username === '') {
                     setinputProps({ label: 'Username', hint: 'Create a username', type: 'text' })
                     setProcessing(false)
@@ -111,7 +132,7 @@ function Auth() {
                                 {processing && <CircularProgress size={'170px'} sx={{ position: 'fixed', ml: '-165px', mt: '-5px' }} />}
                             </Box>
                             <Typography variant='h6'>{processing ? "Just a sec" : "Login to Notify"}</Typography>
-                            <Typography sx={{ color: 'gray', fontSize: '15px', width: '250px', overflow: 'visible' }}>{!processing && inputProps.hint}</Typography>
+                            <Typography sx={{ color: error === '' ? 'gray' : 'red', fontSize: '15px', width: '250px', overflow: 'visible' }}>{error !== '' ? error : !processing && inputProps.hint}</Typography>
 
                             <Collapse in={!processing}>
                                 <TextField disabled={processing} label={inputProps.label} InputProps={{ sx: { borderRadius: '20px' } }} type={inputProps.type} fullWidth value={inputText} onChange={(t) => setInputText(t.target.value)} />

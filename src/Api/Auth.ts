@@ -1,6 +1,6 @@
 import instance from "./Config";
 
-const loginController = (body: { email: string }) => {
+const loginController = (body: { email: string, password?: string }) => {
     try {
         return instance.post('/auth/login', body)
     } catch (error) {
