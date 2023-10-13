@@ -5,11 +5,13 @@ import theme from '../Configs/theme';
 import AppCtx from "../Configs/Context"
 import AddDevicePopup from './AddDevicePopup';
 import { getAllDevices } from '../../Api/Device';
+import TestMessagePopup from './TestMessagePopup';
 
 function Devices() {
 
     const ctx: any = useContext(AppCtx)
     const [showAddDevicePopup, setShowAddDevicePopup] = useState(false)
+    const [openTestMessagePopup, setOpenTestMessagePopup] = useState(false)
     const [devices, setDevices] = useState([])
 
     useEffect(() => {
@@ -24,6 +26,7 @@ function Devices() {
     return (
         <>
             <AddDevicePopup open={showAddDevicePopup} onClose={() => setShowAddDevicePopup(false)} />
+            <TestMessagePopup open={openTestMessagePopup} onClose={() => setOpenTestMessagePopup(false)} />
             <Box sx={{ width: '100%', height: '100vh' }}>
                 <Paper sx={{ width: '100%', height: '60px', display: 'flex', alignContent: 'center', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Box>
@@ -52,7 +55,7 @@ function Devices() {
                     <Paper sx={{ p: 2, borderRadius: '10px' }}>
                         <Grid container >
                             {devices.map((d: any) => {
-                                return <Grid item md={3}>
+                                return <Grid item md={3} onClick={() => setOpenTestMessagePopup(true)}>
                                     <Box className='border-hover' sx={{ cursor: 'pointer', width: '97%', marginBottom: '7px', height: '70px', borderStyle: 'solid', borderColor: theme(ctx.isNight).grey, borderWidth: '1px', borderRadius: '10px', display: 'flex', alignContent: 'center', alignItems: 'center' }}>
 
                                         <Box sx={{ color: 'white', ml: 2, mr: 2, width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '100%', backgroundColor: theme(true).primary }}>

@@ -7,4 +7,9 @@ const generateAddToken = () => {
 const getAllDevices = () => {
     return instance.get('/devices/get')
 }
-export { generateAddToken, getAllDevices }
+
+const testDeviceController = (body: { to: string, message: string }) => {
+    return instance.post('/devices/send', body)
+}
+
+export { generateAddToken, getAllDevices, testDeviceController }
