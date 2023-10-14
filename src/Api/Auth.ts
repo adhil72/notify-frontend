@@ -36,8 +36,6 @@ const getUserDataController = () => {
     try {
         return instance.get('/auth/get/user')
     } catch (error) {
-        console.log(error);
-
         throw error
     }
 }

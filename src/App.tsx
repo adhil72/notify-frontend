@@ -59,53 +59,14 @@ function App() {
   const router = useLocation();
   const nav = useNavigate();
 
-  useEffect(() => {
-    localStorage.getItem('token') === "undefined" && localStorage.removeItem('token')
-  }, [])
+  useEffect(() => { localStorage.getItem('token') === "undefined" && localStorage.removeItem('token') }, [])
+  useEffect(() => { if (localStorage.getItem('token')) { fetchUserData() } }, [localStorage.getItem('token')])
+  useEffect(() => {checkAuthPermission();checkPathPermission() }, [router.pathname]);
+  useEffect(() => { document.getElementsByTagName('body')[0].style.backgroundColor = isNight ? '#2a2a2a' : '#f2f2f2'; localStorage.setItem('dark', `${isNight}`) }, [isNight]);
 
-  const fetchUserData = () => {
-    getUserDataController().then((response) => {
-      setUserData(response.data.data)
-    }).catch((err) => {
-      throw err
-    })
-  }
-
-  useEffect(() => {
-    if (localStorage.getItem('token')) {
-      fetchUserData()
-    }
-  }, [localStorage.getItem('token')])
-
-
-
-
-  useEffect(() => {
-    if (router.pathname !== '/auth') {
-      if (localStorage.getItem('token') === null) {
-        nav('/auth');
-      }
-    } else if (router.pathname === '/auth') {
-      if (localStorage.getItem('token') !== null) {
-        nav('/');
-      }
-    }
-
-    if (router.pathname === '/') {
-      setActive('home')
-    } else if (router.pathname === '/devices') {
-      setActive('devices')
-    }
-
-  }, [router.pathname]);
-
-  useEffect(() => {
-    document.getElementsByTagName('body')[0].style.backgroundColor = isNight
-      ? '#2a2a2a' // Replace with your dark mode background color
-      : '#f2f2f2'; // Replace with your light mode background color
-
-    localStorage.setItem('dark', `${isNight}`)
-  }, [isNight]);
+  const fetchUserData = () => getUserDataController().then((response) => { setUserData(response.data.data) }).catch((err) => { throw err })
+  const checkPathPermission = () => { if (router.pathname === '/') { setActive('home') } else if (router.pathname === '/devices') { setActive('devices') } }
+  const checkAuthPermission = () => { if (router.pathname !== '/auth') { if (localStorage.getItem('token') === null) { nav('/auth'); } } else if (router.pathname === '/auth') { if (localStorage.getItem('token') !== null) { nav('/') } } }
 
   return (
     <MyContext.Provider value={{ active, setActive, isNight, setIsNight, userData }}>
@@ -117,7 +78,6 @@ function App() {
             <Route path='/devices' element={<Devices />} />
           </Routes>
         } />
-
       </ThemeProvider>
     </MyContext.Provider>
   );

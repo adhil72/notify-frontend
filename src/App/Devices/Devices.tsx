@@ -1,5 +1,5 @@
 import { AddRounded, Brightness5Rounded, Brightness7Rounded, LogoutOutlined, NotificationsActiveOutlined, PhoneIphoneRounded } from '@mui/icons-material';
-import { Box, Grid, Paper, Tooltip, Typography } from '@mui/material';
+import { Box, Collapse, Grid, Paper, Tooltip, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react'
 import theme from '../Configs/theme';
 import AppCtx from "../Configs/Context"
@@ -13,15 +13,10 @@ function Devices() {
     const [showAddDevicePopup, setShowAddDevicePopup] = useState(false)
     const [openTestMessagePopup, setOpenTestMessagePopup] = useState(false)
     const [devices, setDevices] = useState([])
+    const [active, setActive] = useState(false)
 
-    useEffect(() => {
-        getAllDevices().then((res) => {
-            setDevices(res.data.data)
-        }).catch((err) => {
-            console.log(err);
-        })
-    }, [])
-
+    useEffect(() => { getAllDevices().then((res) => { setDevices(res.data.data) }).catch((err) => { console.log(err) }) }, [])
+    useEffect(() => { setActive(false); setTimeout(() => { setActive(true) }, 1); }, [])
 
     return (
         <>
@@ -50,39 +45,41 @@ function Devices() {
                         </Tooltip>
                     </Box>
                 </Paper>
+                <Collapse in={active}>
 
-                <Box sx={{ m: 2 }}>
-                    <Paper sx={{ p: 2, borderRadius: '10px' }}>
-                        <Grid container >
-                            {devices.map((d: any) => {
-                                return <Grid item md={3} onClick={() => setOpenTestMessagePopup(true)}>
-                                    <Box className='border-hover' sx={{ cursor: 'pointer', width: '97%', marginBottom: '7px', height: '70px', borderStyle: 'solid', borderColor: theme(ctx.isNight).grey, borderWidth: '1px', borderRadius: '10px', display: 'flex', alignContent: 'center', alignItems: 'center' }}>
-
+                    <Box sx={{ m: 2 }}>
+                        <Paper sx={{ p: 2, borderRadius: '10px' }}>
+                            <Grid container >
+                                {devices.map((d: any) => {
+                                    return <Grid item md={3} onClick={() => setOpenTestMessagePopup(true)}>
+                                        <Box className='border-hover' sx={{ cursor: 'pointer', width: '97%', marginBottom: '7px', height: '70px', borderStyle: 'solid', borderColor: theme(ctx.isNight).grey, borderWidth: '1px', borderRadius: '10px', display: 'flex', alignContent: 'center', alignItems: 'center' }}>
+                                            <Box sx={{ color: 'white', ml: 2, mr: 2, width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '100%', backgroundColor: theme(true).primary }}>
+                                                <PhoneIphoneRounded />
+                                            </Box>
+                                            <Box>
+                                                <Typography>{d.name}</Typography>
+                                                <Typography sx={{ color: 'GrayText', fontSize: '13px' }}>{new Date(d.createdAt).toLocaleDateString()}</Typography>
+                                            </Box>
+                                        </Box>
+                                    </Grid>
+                                })}
+                                <Grid item md={3}>
+                                    <Box onClick={() => setShowAddDevicePopup(true)} className='border-hover' sx={{ cursor: 'pointer', width: '97%', height: '70px', borderStyle: 'solid', borderColor: theme(ctx.isNight).grey, borderWidth: '1px', borderRadius: '10px', display: 'flex', alignContent: 'center', alignItems: 'center' }}>
                                         <Box sx={{ color: 'white', ml: 2, mr: 2, width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '100%', backgroundColor: theme(true).primary }}>
-                                            <PhoneIphoneRounded />
+                                            <AddRounded />
                                         </Box>
                                         <Box>
-                                            <Typography>{d.name}</Typography>
-                                            <Typography sx={{ color: 'GrayText', fontSize: '13px' }}>{new Date(d.createdAt).toLocaleDateString()}</Typography>
+                                            <Typography>Add</Typography>
                                         </Box>
-
                                     </Box>
                                 </Grid>
-                            })}
-                            <Grid item md={3}>
-                                <Box onClick={() => setShowAddDevicePopup(true)} className='border-hover' sx={{ cursor: 'pointer', width: '97%', height: '70px', borderStyle: 'solid', borderColor: theme(ctx.isNight).grey, borderWidth: '1px', borderRadius: '10px', display: 'flex', alignContent: 'center', alignItems: 'center' }}>
-                                    <Box sx={{ color: 'white', ml: 2, mr: 2, width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '100%', backgroundColor: theme(true).primary }}>
-                                        <AddRounded />
-                                    </Box>
-                                    <Box>
-                                        <Typography>Add</Typography>
-                                    </Box>
-                                </Box>
                             </Grid>
-                        </Grid>
-                    </Paper>
-                </Box>
-            </Box></>
+                        </Paper>
+                    </Box>
+                </Collapse>
+
+            </Box>
+        </>
     )
 }
 
