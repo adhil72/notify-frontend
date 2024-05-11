@@ -12,6 +12,8 @@ import Devices from './App/Devices/Devices';
 import instance from './Api/Config';
 import { getUserDataController } from './Api/Auth';
 import TypeUser from './App/Types/TypeUser';
+import Api from './App/Api/Api';
+import Download from './App/Download/Download';
 
 const Darktheme = createTheme({
   palette: {
@@ -67,6 +69,7 @@ function App() {
   const fetchUserData = () => getUserDataController().then((response) => { setUserData(response.data.data) }).catch((err) => { throw err })
   const checkPathPermission = () => { if (router.pathname === '/') { setActive('home') } else if (router.pathname === '/devices') { setActive('devices') } }
   const checkAuthPermission = () => { if (router.pathname !== '/auth') { if (localStorage.getItem('token') === null) { nav('/auth'); } } else if (router.pathname === '/auth') { if (localStorage.getItem('token') !== null) { nav('/') } } }
+  
 
   return (
     <MyContext.Provider value={{ active, setActive, isNight, setIsNight, userData }}>
@@ -76,6 +79,8 @@ function App() {
             <Route path="/auth" element={<Auth />} />
             <Route path='/' element={<Home />} />
             <Route path='/devices' element={<Devices />} />
+            <Route path='/api' element={<Api />} />
+            <Route path='/download' element={<Download />} />
           </Routes>
         } />
       </ThemeProvider>

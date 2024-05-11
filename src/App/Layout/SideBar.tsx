@@ -1,4 +1,4 @@
-import { BarChartRounded, HomeRounded, PersonRounded, SmartphoneOutlined, WhatsApp } from '@mui/icons-material'
+import { BarChartRounded, HomeRounded, PersonRounded, SmartphoneOutlined, ApiRounded, AndroidRounded } from '@mui/icons-material'
 import { Box, Grow, Typography } from '@mui/material'
 import AppCtx from "../Configs/Context"
 import { useContext } from 'react'
@@ -12,7 +12,9 @@ function SideBar() {
 
     const SideBarElement: { title: string, icon: any, onClick?: () => void }[] = [
         { title: 'Home', icon: HomeRounded, onClick: () => nav('/') },
-        { title: 'Devices', icon: SmartphoneOutlined, onClick: () => nav('/devices') }
+        { title: 'Devices', icon: SmartphoneOutlined, onClick: () => nav('/devices') },
+        { title: 'Api', icon: ApiRounded, onClick: () => {ctx.setActive('api');nav('/api')} },
+        { title: 'Download', icon: AndroidRounded, onClick: () =>{ctx.setActive('download');nav('/download')} }
     ]
 
     return (

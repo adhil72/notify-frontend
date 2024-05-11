@@ -40,4 +40,12 @@ const getUserDataController = () => {
     }
 }
 
-export { loginController, updatePasswordController, updateNameController, updateUserNameController, getUserDataController }
+const generateTokenController = () => {
+    try {
+        return instance.get('/auth/api/token')
+    } catch (error) {
+        throw error
+    }
+}
+
+export { loginController, updatePasswordController, updateNameController, updateUserNameController, getUserDataController, generateTokenController }
